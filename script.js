@@ -1,4 +1,6 @@
-const Tasks = [
+function taskFactory(id,title,content,dueDate,project,priority,completed ) ={
+
+return{}
     { project: "Task 1" },
     { project: "Task 2" },
     { project: "Task 3" },

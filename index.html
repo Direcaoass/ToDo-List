@@ -30,18 +30,18 @@
     <div class="taskPopUp">
       <form action="">
         <h2>Create a new task</h2>
-        <input type="text" id="title" placeholder="Task Title" maxlength="25" required>
-        <textarea name="" id="" cols="35" rows="7" id="content" placeholder="Task Content" required></textarea>
-        <div class="projectInput"><input type="text" id="projectInput" list="projectList" placeholder="Project Name">
+        <input type="text" id="taskTitle" placeholder="Task Title" maxlength="30" required>
+        <textarea  cols="35" rows="5" id="taskContent" placeholder="Task Content" required></textarea>
+        <input type="text" id="projectInput" list="projectList" placeholder="Project Name"required>
           <datalist id="projectList"></datalist>
-        </div>
-        <label for="dueDate">DueDate</label><input type="date" id="dueDate" placeholder="DueDate" required>
-        <label for="priorityDiv">Priority</label>
-        <div class="priorityDiv"> <label for="Highpriority">High</label><input type="radio" id="highPriority"
+        
+        <div class="dueDate">DueDate: <input type="date" id="dueDate" placeholder="DueDate" required></div>
+        <div class="priorityDiv">Priority: <label for="Highpriority">High</label><input type="radio" id="highPriority"
             name="priority"><label for="Midpriority">Mid</label>
           <input type="radio" id="Midpriority" name="priority" required><label for="lowPriority">Low</label><input
             type="radio" id="lowPriority" name="priority">
         </div>
+        <div class="completedBtn">Check if Completed <input type="checkbox" id="completed"></div>
         <div class="PopupBtn"><button class="submitBtn" type="submit">Confirm</button>
           <button class="cancelBtn" type="button">Cancel</button>
         </div>
