@@ -13,19 +13,38 @@
 
 <body>
   <header>ToDo List</header>
-  <nav class='navMenu'>
-    <div class="basicMenu">
-      <ul>
-        <li><button id="home">Home</button></li>
-        <li> <button id="today">Today</button></li>
-        <li><button id="week">This week</button></li>
-        <li><button id="projects">Projects</button></li>
-      </ul>
+  <main>
+    <nav class='navMenu'>
+      <div class="basicMenu">
+        <ul>
+          <li><button id="home">Home</button></li>
+          <li> <button id="today">Today</button></li>
+          <li><button id="week">This week</button></li>
+          <li><button id="projects">Projects</button></li>
+        </ul>
+      </div>
+      <div class="projectsDiv"></div>
+      <div class="addButton"><button><i class="fa-solid fa-plus fa-4x"></i></button></div>
+    </nav>
+    <div class="mainContent">a</div>
+    <div class="taskPopUp">
+      <form action="">
+        <h2>Create a new task</h2>
+        <input type="text" id="title" placeholder="Task Title" maxlength="25" required>
+        <textarea name="" id="" cols="35" rows="10" id="content" placeholder="Task Content" required></textarea>
+        <label for="dueDate">DueDate</label><input type="date" id="dueDate" placeholder="DueDate"required>
+        <label for="priorityDiv">Priority</label><div class="priorityDiv"> <label for="Highpriority">High</label><input type="radio" id="highPriority"
+            name="priority"><label for="Midpriority">Mid</label>
+          <input type="radio" id="Midpriority" name="priority" required><label for="lowPriority">Low</label><input type="radio"
+            id="lowPriority" name="priority">
+        </div>
+        <div class="PopupBtn"><button class="submitBtn">Confirm</button>
+          <button class="cancelBtn" type="button">Cancel</button>
+        </div>
+      </form>
     </div>
-    <div class="projectsDiv"></div>
-    <div class="addButton"><button><i class="fa-solid fa-plus fa-4x"></i></button></div>
-  </nav>
-  <div class="mainContent"></div>
+    <div class="overlay" id="overlay"></div>
+  </main>
 </body>
 
 
