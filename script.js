@@ -21,8 +21,27 @@ function createTask(id, title, content, dueDate, project, priority, completed) {
 
 
 
-//DOM STUFF
 
+
+
+
+//Local Storage
+
+function saveTasks(tasks) {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function getTasks() {
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]')
+    return tasks;
+}
+
+
+
+
+
+
+//DOM STUFF
 
 function addTask(){
 
@@ -33,8 +52,10 @@ function addTask(){
     const taskDueDate= document.getElementById('taskDueDate');
     const taskCompleted= document.getElementById('taskCompleted');
     if (checkInputFields(taskTitle,taskContent,taskDueDate,taskProject,taskPriority,taskCompleted)){
-     tasksArray.push(createTask(generateId(),taskTitle.value,taskContent.value,taskDueDate.value,taskProject.value,taskPriority.value,taskCompleted.checked))
-        console.log(tasksArray)
+        const newTask=createTask(generateId(),taskTitle.value,taskContent.value,taskDueDate.value,taskProject.value,taskPriority.value,taskCompleted.checked);
+        tasksArray.push(newTask);
+        saveTasks(tasksArray);
+        console.log(tasksArray);
     }
         }
         
@@ -66,7 +87,7 @@ const cancelBtn=document.getElementById('cancelBtn')
 addButton.onclick=()=>activePopup();
 cancelBtn.onclick=()=>hidePopup();
 confirmBtn.onclick=(e)=>{
-    addTask()
+  addTask();    
   e.preventDefault();
 }
 
