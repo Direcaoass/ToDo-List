@@ -84,7 +84,7 @@ ul {
   top: 50%;
   left: 50%;
   z-index: 1;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%) scale(0);
   transition: 0.2s ease-in-out; 
 }
 
@@ -115,7 +115,7 @@ ul {
   cursor: pointer;
   }
 
-#taskContent,#taskTitle,#projectInput{
+#taskContent,#taskTitle,#taskProject{
  width: 100%;
 
 }

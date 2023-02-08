@@ -24,7 +24,7 @@
         </ul>
       </div>
       <div class="projectsDiv"></div>
-      <div class="addButton"><button><i class="fa-solid fa-plus fa-4x"></i></button></div>
+      <div id="addButton"><button><i class="fa-solid fa-plus fa-4x"></i></button></div>
     </nav>
     <div class="mainContent">a</div>
     <div class="taskPopUp">
@@ -32,18 +32,18 @@
         <h2>Create a new task</h2>
         <input type="text" id="taskTitle" placeholder="Task Title" maxlength="30" required>
         <textarea  cols="35" rows="5" id="taskContent" placeholder="Task Content" required></textarea>
-        <input type="text" id="projectInput" list="projectList" placeholder="Project Name"required>
+        <input type="text" id="taskProject" list="projectList" placeholder="Project Name"required>
           <datalist id="projectList"></datalist>
         
-        <div class="dueDate">DueDate: <input type="date" id="dueDate" placeholder="DueDate" required></div>
-        <div class="priorityDiv">Priority: <label for="Highpriority">High</label><input type="radio" id="highPriority"
-            name="priority"><label for="Midpriority">Mid</label>
-          <input type="radio" id="Midpriority" name="priority" required><label for="lowPriority">Low</label><input
-            type="radio" id="lowPriority" name="priority">
+        <div class="dueDate">DueDate: <input type="date" id="taskDueDate" placeholder="DueDate" required></div>
+        <div class="priorityDiv" id="taskPriority">Priority: <label for="Highpriority">High</label><input type="radio" id="highPriority"
+            name="priority" value="high"><label for="Midpriority">Mid</label>
+          <input type="radio" id="Midpriority" name="priority" value="mid" required><label for="lowPriority">Low</label><input
+            type="radio" id="lowPriority" name="priority" value="low">
         </div>
-        <div class="completedBtn">Check if Completed <input type="checkbox" id="completed"></div>
-        <div class="PopupBtn"><button class="submitBtn" type="submit">Confirm</button>
-          <button class="cancelBtn" type="button">Cancel</button>
+        <div class="completedBtn">Check if Completed <input type="checkbox" id="taskCompleted"></div>
+        <div class="PopupBtn"><button id="confirmBtn" type="submit">Confirm</button>
+          <button id="cancelBtn" type="button">Cancel</button>
         </div>
       </form>
     </div>
