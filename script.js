@@ -13,17 +13,10 @@ function createTask(id, title, content, dueDate, project, priority, completed) {
 
   tasksArray=[];
 
- 
 
   function generateId() {
     return Math.floor(Math.random() * 9000);
 }
-
-
-
-
-
-
 
 //Local Storage
 
@@ -42,6 +35,21 @@ function getTasks() {
 
 
 //DOM STUFF
+
+function showHomeTasks(){
+    const tasks=getTasks();    
+    tasks.forEach(task=>createTaskList(task)
+    )
+}
+
+function createTaskList(task){
+const mainContent=document.querySelector('.mainContent')
+const taskDiv=document.createElement('div')
+
+
+}
+
+
 
 function addTask(){
 
@@ -79,11 +87,15 @@ function hidePopup(){
                 taskPopUp.classList.remove('popUpActive')
                 }
  
-  
+
+                
 const addButton=document.getElementById('addButton');
 const confirmBtn=document.getElementById('confirmBtn')
 const cancelBtn=document.getElementById('cancelBtn')
+const homeBtn=document.getElementById('home');
 
+
+homeBtn.onclick=()=>showHomeTasks()
 addButton.onclick=()=>activePopup();
 cancelBtn.onclick=()=>hidePopup();
 confirmBtn.onclick=(e)=>{

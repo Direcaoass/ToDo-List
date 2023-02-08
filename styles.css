@@ -13,6 +13,7 @@ header {
   background-color: gray;
   text-align: center;
   height: 6vh;
+  width: 100vw;
   font-size: 2rem;
 
 }
@@ -60,12 +61,35 @@ ul {
   overflow: auto;
 }
 
-.mainContent{
-  background-color: aqua;
+.mainContentGrid{
+  background-color:whitesmoke;
   width: 100%;
-  
+    
 }
 
+.mainContent{
+  padding: 2.5rem 5rem;
+
+}
+
+.mainContent h3{
+  padding-bottom: 1rem;
+}
+
+.taskDiv{
+  display: flex;
+  justify-content: space-between;
+  background-color: lightgray;
+  padding: 0.3rem;
+
+  }
+
+  .leftSide,.rightSide{
+    display: flex;
+    gap:1rem;
+  }
+
+  
 
 .overlay {
   position: fixed;
