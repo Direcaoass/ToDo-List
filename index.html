@@ -28,18 +28,7 @@
     </nav>
     <div class="mainContentGrid">
       <div class="mainContent">
-        <h3>Filter name</h3>
-        <div class="taskDiv">
-          <div class="leftSide">
-            <input type="checkbox" id="taskCheck">
-            <div class="title">titulo</div>
-          </div>
-          <div class="rightSide">
-            <div class="dueDate"></div>
-            <button class="edit">Edit</button>
-            <button class="remove">Remove</button>
-          </div>
-        </div>
+        
       </div>
     </div>
     <div class="taskPopUp">
@@ -51,10 +40,13 @@
         <datalist id="projectList"></datalist>
 
         <div class="dueDate">DueDate: <input type="date" id="taskDueDate" placeholder="DueDate" required></div>
-        <div class="priorityDiv" id="taskPriority">Priority: <label for="Highpriority">High</label><input type="radio"
-            id="highPriority" name="priority" value="high"><label for="Midpriority">Mid</label>
-          <input type="radio" id="Midpriority" name="priority" value="mid" required><label
-            for="lowPriority">Low</label><input type="radio" id="lowPriority" name="priority" value="low">
+        <div class="priorityDiv" id="taskPriority">Priority: 
+          <label for="Highpriority">High</label>
+          <input type="radio" id="highPriority" name="priority" value="high" required>
+          <label for="Midpriority">Mid</label>
+          <input type="radio" id="Midpriority" name="priority" value="mid" >
+          <label for="lowPriority">Low</label>
+          <input type="radio" id="lowPriority" name="priority" value="low">
         </div>
         <div class="completedBtn">Check if Completed <input type="checkbox" id="taskCompleted"></div>
         <div class="PopupBtn"><button id="confirmBtn" type="submit">Confirm</button>
