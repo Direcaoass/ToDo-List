@@ -56,46 +56,40 @@ function showHomeTasks() {
 }
 
 
-
 function addTask() {
-
   const taskTitle = document.getElementById('taskTitle');
   const taskContent = document.getElementById('taskContent');
-  const taskProject = document.getElementById('taskProject');
   const taskPriority = document.querySelector('input[name="priority"]:checked');
   const taskDueDate = document.getElementById('taskDueDate');
+  const taskProject = document.getElementById('taskProject')
   const taskCompleted = document.getElementById('taskCompleted');
 
-  if (checkInputFields(taskTitle, taskContent, taskDueDate, taskProject, taskPriority, taskCompleted)) {
 
-    const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked);
-    console.log(newTask)
-    tasksArray.push(newTask);
-    saveTasks(tasksArray);
-
-  }
+  const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked);
+  console.log(newTask)
+  tasksArray.push(newTask);
+  saveTasks(tasksArray);
 }
 
+function getProjects() {
+  const datalist = document.getElementById("projectList");
+  datalist.innerHTML='';
+  const tasks = getTasks();
+  tasks.forEach(task => {
+    let option = document.createElement("option");
+    option.value = task.project;
+    datalist.appendChild(option);
+  })
 
-function checkInputFields(taskTitle, taskContent, taskDueDate, taskProject) {
-  const taskInputs = [taskTitle, taskContent, taskDueDate, taskProject];
-  if (taskInputs.some(input => input.value === "")) {
-    alert('Please fill all the fields');
-    return false;
-  }
+};
 
-  else return true
-}
 
 activePopup = () => taskPopUp.classList.add('popUpActive');
-
 hidePopup = () => taskPopUp.classList.remove('popUpActive');
 
 
 const taskPopUp = document.querySelector('.taskPopUp')
-const form=document.getElementById('taskForm');
-
-
+const taskForm = document.getElementById('taskForm');
 const addButton = document.getElementById('addButton');
 const confirmBtn = document.getElementById('confirmBtn')
 const cancelBtn = document.getElementById('cancelBtn')
@@ -106,16 +100,19 @@ homeBtn.onclick = () => showHomeTasks()
 
 addButton.onclick = () => {
   activePopup();
+  getProjects();
 };
 
 cancelBtn.onclick = () => {
   hidePopup();
-  form.reset();
+  taskForm.reset();
 }
+
+
 
 confirmBtn.onclick = (e) => {
   addTask();
-  form.reset();
+  taskForm.reset();
   e.preventDefault();
   hidePopup()
 }
