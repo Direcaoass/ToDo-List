@@ -92,20 +92,8 @@ activePopup = () => taskPopUp.classList.add('popUpActive');
 hidePopup = () => taskPopUp.classList.remove('popUpActive');
 
 
-function clearPopup() {
-  const inputs = taskPopUp.querySelectorAll('input,textarea');
-  inputs.forEach(input => {
-    input.value = "";
-    if (input.type === "radio" || input.type === "checkbox") {
-      input.checked = false;
-    }
-  })
-
-}
-
-
 const taskPopUp = document.querySelector('.taskPopUp')
-
+const form=document.getElementById('taskForm');
 
 
 const addButton = document.getElementById('addButton');
@@ -122,12 +110,12 @@ addButton.onclick = () => {
 
 cancelBtn.onclick = () => {
   hidePopup();
-  clearPopup();
+  form.reset();
 }
 
 confirmBtn.onclick = (e) => {
   addTask();
-  clearPopup();
+  form.reset();
   e.preventDefault();
   hidePopup()
 }
