@@ -51,8 +51,39 @@ function showHomeTasks() {
     </div>
   </div>` ;
 
-    mainContent.innerHTML = `<h3>Filter name</h3>` + taskDiv;
+    mainContent.innerHTML = `<h3>Menu name</h3>` + taskDiv;
+    const taskElement=document.querySelector('.taskDiv')
+    taskEvents(task.id,mainContent,taskElement);
+
+
   })
+}
+
+function taskEvents(taskId,mainContent,taskElement) {
+  const editBtn = mainContent.querySelectorAll('.edit')
+  const removeBtn = mainContent.querySelectorAll('.remove')
+
+  editBtn.forEach(button => {
+    button.addEventListener('click', () => {
+      alert('Edit task');
+    });
+  });
+
+  removeBtn.forEach(button => {
+    button.addEventListener('click', () => {
+      alert('Remove task');
+      removeTask(taskId,mainContent,taskElement)
+    });
+  });
+
+}
+
+function removeTask(id,mainContent,taskElement) {
+   const tasks = getTasks().filter((task) => task.id !== id);
+    saveTasks(tasks);
+    mainContent.removeChild(taskElement);
+
+
 }
 
 
@@ -65,15 +96,33 @@ function addTask() {
   const taskCompleted = document.getElementById('taskCompleted');
 
 
-  const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked);
-  console.log(newTask)
-  tasksArray.push(newTask);
-  saveTasks(tasksArray);
+  if (checkInputFields(taskTitle, taskContent, taskDueDate, taskProject, taskPriority, taskCompleted)) {
+
+    const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked);
+    console.log(newTask)
+    tasksArray.push(newTask);
+    saveTasks(tasksArray);
+    hidePopup()
+    formReset();
+
+  }
+
+}
+
+
+function checkInputFields(taskTitle, taskContent, taskDueDate, taskProject) {
+  const taskInputs = [taskTitle, taskContent, taskDueDate, taskProject];
+  if (taskInputs.some(input => input.value === "")) {
+    alert('Please fill all the fields');
+    return false;
+  }
+
+  else return true
 }
 
 function getProjects() {
   const datalist = document.getElementById("projectList");
-  datalist.innerHTML='';
+  datalist.innerHTML = '';
   const tasks = getTasks();
   tasks.forEach(task => {
     let option = document.createElement("option");
@@ -83,11 +132,6 @@ function getProjects() {
 
 };
 
-
-activePopup = () => taskPopUp.classList.add('popUpActive');
-hidePopup = () => taskPopUp.classList.remove('popUpActive');
-
-
 const taskPopUp = document.querySelector('.taskPopUp')
 const taskForm = document.getElementById('taskForm');
 const addButton = document.getElementById('addButton');
@@ -95,6 +139,11 @@ const confirmBtn = document.getElementById('confirmBtn')
 const cancelBtn = document.getElementById('cancelBtn')
 const homeBtn = document.getElementById('home');
 
+
+
+activePopup = () => taskPopUp.classList.add('popUpActive');
+hidePopup = () => taskPopUp.classList.remove('popUpActive');
+formReset = () => taskForm.reset();
 
 homeBtn.onclick = () => showHomeTasks()
 
@@ -105,16 +154,15 @@ addButton.onclick = () => {
 
 cancelBtn.onclick = () => {
   hidePopup();
-  taskForm.reset();
+  formReset();
 }
 
 
 
 confirmBtn.onclick = (e) => {
   addTask();
-  taskForm.reset();
   e.preventDefault();
-  hidePopup()
+
 }
 
 
