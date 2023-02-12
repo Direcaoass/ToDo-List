@@ -12,6 +12,7 @@ function createTask(id, title, content, dueDate, project, priority, completed) {
 }
 
 tasksArray = [];
+let editFlag = false;
 
 
 function generateId() {
@@ -35,11 +36,11 @@ function getTasks() {
 function showHomeTasks() {
   const mainContent = document.querySelector('.mainContent')
   const tasks = getTasks();
-  let taskDiv = '';
+  let tasksDiv = '';
   tasks.forEach(task => {
 
-    taskDiv += `
-       <div class="taskDiv">
+    tasksDiv += `
+       <div class="taskDiv" data-taskId="${task.id}">
     <div class="leftSide">
       <input type="checkbox" id="taskCheck">
       <div class="title">${task.title}</div>
@@ -50,44 +51,72 @@ function showHomeTasks() {
       <button class="remove">Remove</button>
     </div>
   </div>` ;
-
-    mainContent.innerHTML = `<h3>Menu name</h3>` + taskDiv;
-    const taskElement=document.querySelector('.taskDiv')
-    taskEvents(task.id,mainContent,taskElement);
-
-
+    
+    setTimeout(() => {
+      const taskElement = document.querySelector(`.taskDiv[data-taskId="${task.id}"]`)
+      taskEvents(task.id, mainContent, taskElement);
+    }, 0);
+    
   })
+
+  mainContent.innerHTML = `<h3>Menu name</h3>` + tasksDiv;
 }
 
-function taskEvents(taskId,mainContent,taskElement) {
-  const editBtn = mainContent.querySelectorAll('.edit')
-  const removeBtn = mainContent.querySelectorAll('.remove')
+function taskEvents(taskId, mainContent, taskElement) {
+  console.log(taskId)
 
-  editBtn.forEach(button => {
-    button.addEventListener('click', () => {
-      alert('Edit task');
-    });
+  taskElement.querySelector('.edit').addEventListener('click', () => {
+    editTask(taskId);
   });
 
-  removeBtn.forEach(button => {
-    button.addEventListener('click', () => {
-      alert('Remove task');
-      removeTask(taskId,mainContent,taskElement)
-    });
+  taskElement.querySelector('.remove').addEventListener('click', () => {
+
+    removeTask(taskId, mainContent, taskElement)
   });
 
 }
 
-function removeTask(id,mainContent,taskElement) {
-   const tasks = getTasks().filter((task) => task.id !== id);
-    saveTasks(tasks);
-    mainContent.removeChild(taskElement);
 
+function editTask(id) {
+  console.log(id)
+  activePopup();
+  getProjects();
+  editFlag = true;
+  getTaskToEdit(id)
+  popUpEvents(id)
+}
 
+function getTaskToEdit(id) {
+
+  const taskTarget = getTasks().find((task) => task.id === id);
+
+  const popupTitle = document.querySelector('#popupTitle');
+  const taskTitle = document.querySelector('#taskTitle');
+  const taskContent = document.querySelector('#taskContent');
+  const taskDueDate = document.querySelector('#taskDueDate');
+  const taskProject = document.querySelector('#taskProject')
+  const taskCompleted = document.querySelector('#taskCompleted');
+  const taskPriority = document.querySelector(`input[name='priority'][value='${taskTarget.priority}']`);
+
+  popupTitle.innerText = "Edit task";
+  taskTitle.value = taskTarget.title;
+  taskContent.value = taskTarget.content;
+  taskPriority.checked = true;
+  taskDueDate.value = taskTarget.dueDate;
+  taskProject.value = taskTarget.project;
+  taskCompleted.checked = taskTarget.completed;
 }
 
 
-function addTask() {
+
+function removeTask(id, mainContent, taskElement) {
+  const tasks = getTasks().filter((task) => task.id !== id);
+  saveTasks(tasks);
+  mainContent.removeChild(taskElement);
+}
+
+
+function addTask(id) {
   const taskTitle = document.getElementById('taskTitle');
   const taskContent = document.getElementById('taskContent');
   const taskPriority = document.querySelector('input[name="priority"]:checked');
@@ -95,19 +124,37 @@ function addTask() {
   const taskProject = document.getElementById('taskProject')
   const taskCompleted = document.getElementById('taskCompleted');
 
-
   if (checkInputFields(taskTitle, taskContent, taskDueDate, taskProject, taskPriority, taskCompleted)) {
 
-    const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked);
-    console.log(newTask)
-    tasksArray.push(newTask);
+    if (!editFlag) {
+      const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked);
+      console.log(newTask)
+      tasksArray.push(newTask);
+    }
+    else {
+      updateTask(id,
+        {
+          title: taskTitle.value,
+          content: taskContent.value,
+          priority: taskPriority.value,
+          dueDate: taskDueDate.value,
+          project: taskProject.value,
+          completed: taskCompleted.checked,
+        })
+    }
     saveTasks(tasksArray);
     hidePopup()
     formReset();
-
   }
-
 }
+
+function updateTask(id, update) {
+  const task = tasksArray.find(task => task.id === id);
+  if (task) {
+    Object.assign(task, update);
+  }
+}
+
 
 
 function checkInputFields(taskTitle, taskContent, taskDueDate, taskProject) {
@@ -139,8 +186,6 @@ const confirmBtn = document.getElementById('confirmBtn')
 const cancelBtn = document.getElementById('cancelBtn')
 const homeBtn = document.getElementById('home');
 
-
-
 activePopup = () => taskPopUp.classList.add('popUpActive');
 hidePopup = () => taskPopUp.classList.remove('popUpActive');
 formReset = () => taskForm.reset();
@@ -150,20 +195,28 @@ homeBtn.onclick = () => showHomeTasks()
 addButton.onclick = () => {
   activePopup();
   getProjects();
+
 };
 
 cancelBtn.onclick = () => {
   hidePopup();
   formReset();
+  editFlag = false;
 }
 
-
-
-confirmBtn.onclick = (e) => {
-  addTask();
-  e.preventDefault();
+function popUpEvents(id) {
+  confirmBtn.onclick = (e) => {
+    addTask(id);
+    editFlag = false;
+    e.preventDefault();
+  }
 
 }
+
+popUpEvents()
+
+
+
 
 
 
