@@ -61,9 +61,6 @@ function showHomeTasks() {
   mainContent.appendChild(taskContainer);
 }
 
- 
-
-
 function taskEvents(taskId, taskContainer, taskElement) {
   console.log(taskId)
   taskElement.querySelector('.edit').addEventListener('click', () => {
@@ -101,7 +98,7 @@ function getTaskToEdit(id) {
   taskContent.value = taskTarget.content;
   taskPriority.checked = true;
   taskDueDate.value = taskTarget.dueDate;
-  taskProject.value = taskTarget.project;
+  taskProject.setAttribute('placeholder', `${taskTarget.project}`); 
   taskCompleted.checked = taskTarget.completed;
 }
 
