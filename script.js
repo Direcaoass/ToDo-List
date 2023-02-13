@@ -56,7 +56,7 @@ function showHomeTasks() {
     taskContainer.appendChild(taskDiv);
     taskEvents(task.id, taskContainer, taskDiv);
   })
-  
+
   mainContent.innerHTML = `<h3>Menu name</h3>`;
   mainContent.appendChild(taskContainer);
 }
@@ -82,23 +82,23 @@ function editTask(id) {
 }
 
 function getTaskToEdit(id) {
+  setPopupTitle("Edit task")
+  setProjectPlaceHolder('');
 
   const taskTarget = getTasks().find((task) => task.id === id);
 
-  const popupTitle = document.querySelector('#popupTitle');
   const taskTitle = document.querySelector('#taskTitle');
   const taskContent = document.querySelector('#taskContent');
   const taskDueDate = document.querySelector('#taskDueDate');
-  const taskProject = document.querySelector('#taskProject')
   const taskCompleted = document.querySelector('#taskCompleted');
   const taskPriority = document.querySelector(`input[name='priority'][value='${taskTarget.priority}']`);
 
-  popupTitle.innerText = "Edit task";
+
   taskTitle.value = taskTarget.title;
   taskContent.value = taskTarget.content;
   taskPriority.checked = true;
   taskDueDate.value = taskTarget.dueDate;
-  taskProject.setAttribute('placeholder', `${taskTarget.project}`); 
+  setProjectPlaceHolder(taskTarget.project);
   taskCompleted.checked = taskTarget.completed;
 }
 
@@ -119,6 +119,8 @@ function addTask(id) {
   const taskProject = document.getElementById('taskProject')
   const taskCompleted = document.getElementById('taskCompleted');
 
+
+
   if (checkInputFields(taskTitle, taskContent, taskDueDate, taskProject, taskPriority, taskCompleted)) {
 
     if (!editFlag) {
@@ -127,8 +129,8 @@ function addTask(id) {
       tasksArray.push(newTask);
     }
     else {
-      updateTask(id,taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked)
-        
+      updateTask(id, taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked)
+
     }
     saveTasks(tasksArray);
     hidePopup()
@@ -136,16 +138,16 @@ function addTask(id) {
   }
 }
 
-function updateTask(id,taskTitle, taskContent, taskDueDate,taskProject,taskPriority, taskCompleted) {
+function updateTask(id, taskTitle, taskContent, taskDueDate, taskProject, taskPriority, taskCompleted) {
   const task = tasksArray.find(task => task.id === id);
-  if (task) {    
-      task.title= taskTitle;
-      task.content= taskContent;
-      task.priority= taskPriority;
-      task.dueDate= taskDueDate;
-      task.project= taskProject;
-      task.completed= taskCompleted;    
-    
+  if (task) {
+    task.title = taskTitle;
+    task.content = taskContent;
+    task.priority = taskPriority;
+    task.dueDate = taskDueDate;
+    task.project = taskProject;
+    task.completed = taskCompleted;
+
   }
 }
 
@@ -165,14 +167,26 @@ function getProjects() {
   const datalist = document.getElementById("projectList");
   datalist.innerHTML = '';
   const tasks = getTasks();
-  tasks.forEach(task => {
+  const uniqueProjects = new Set();
+  tasks.forEach(task => uniqueProjects.add(task.project));
+  uniqueProjects.forEach(project => {
     let option = document.createElement("option");
-    option.value = task.project;
+    option.value = project;
     datalist.appendChild(option);
-    
-  })
-  
-};
+  });
+}
+
+function setProjectPlaceHolder(text) {
+  const taskProject = document.querySelector('#taskProject')
+  taskProject.setAttribute('placeholder', text)
+}
+
+
+function setPopupTitle(title) {
+  const popupTitle = document.querySelector('#popupTitle');
+  popupTitle.innerText = title;
+}
+
 
 const taskPopUp = document.querySelector('.taskPopUp')
 const taskForm = document.getElementById('taskForm');
@@ -188,6 +202,8 @@ formReset = () => taskForm.reset();
 homeBtn.onclick = () => showHomeTasks()
 
 addButton.onclick = () => {
+  setPopupTitle("Add task")
+  setProjectPlaceHolder('Project Name');
   activePopup();
   getProjects();
 
