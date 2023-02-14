@@ -73,8 +73,8 @@ function taskEvents(taskId, taskContainer, taskElement) {
 }
 
 function editTask(id) {
-  console.log(id)
   getProjects();
+  console.log(id)
   editFlag = true;
   getTaskToEdit(id)
   popUpEvents(id)
@@ -83,7 +83,7 @@ function editTask(id) {
 
 function getTaskToEdit(id) {
   setPopupTitle("Edit task")
-  setProjectPlaceHolder('');
+
 
   const taskTarget = getTasks().find((task) => task.id === id);
 
@@ -92,15 +92,16 @@ function getTaskToEdit(id) {
   const taskDueDate = document.querySelector('#taskDueDate');
   const taskCompleted = document.querySelector('#taskCompleted');
   const taskPriority = document.querySelector(`input[name='priority'][value='${taskTarget.priority}']`);
-
+  const taskProject = document.querySelector('#taskProject')
 
   taskTitle.value = taskTarget.title;
   taskContent.value = taskTarget.content;
   taskPriority.checked = true;
   taskDueDate.value = taskTarget.dueDate;
-  setProjectPlaceHolder(taskTarget.project);
+  taskProject.value = taskTarget.project;
   taskCompleted.checked = taskTarget.completed;
 }
+
 
 
 
@@ -118,6 +119,7 @@ function addTask(id) {
   const taskDueDate = document.getElementById('taskDueDate');
   const taskProject = document.getElementById('taskProject')
   const taskCompleted = document.getElementById('taskCompleted');
+
 
 
 
@@ -176,10 +178,7 @@ function getProjects() {
   });
 }
 
-function setProjectPlaceHolder(text) {
-  const taskProject = document.querySelector('#taskProject')
-  taskProject.setAttribute('placeholder', text)
-}
+
 
 
 function setPopupTitle(title) {
@@ -203,17 +202,11 @@ homeBtn.onclick = () => showHomeTasks()
 
 addButton.onclick = () => {
   setPopupTitle("Add task")
-  setProjectPlaceHolder('Project Name');
+  formReset();
   activePopup();
   getProjects();
 
 };
-
-cancelBtn.onclick = () => {
-  hidePopup();
-  formReset();
-  editFlag = false;
-}
 
 function popUpEvents(id) {
   confirmBtn.onclick = (e) => {
@@ -222,6 +215,11 @@ function popUpEvents(id) {
     e.preventDefault();
   }
 
+  cancelBtn.onclick = () => {
+    hidePopup();
+    formReset();
+    editFlag = false;
+  }
 }
 
 popUpEvents()
