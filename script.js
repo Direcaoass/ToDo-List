@@ -52,7 +52,7 @@ function getTasksToShow(menuTitle) {
   else {
     const projectTasks = tasks.filter(task => task.project === menuTitle)
     console.log(projectTasks)
-    showTasks(projectTasks, `${menuTitle} tasks`);
+    showTasks(projectTasks, menuTitle);
   }
 
 
@@ -100,6 +100,7 @@ function showTasks(tasksToShow, menuTitle) {
   tasks.forEach(task => {
     const taskDiv = document.createElement('div');
     taskDiv.className = "taskDiv";
+    task.completed ? taskDiv.classList.add('checkedTasks') : undefined;
     taskDiv.innerHTML = `
       <div class="leftSide">
         <input type="checkbox" id="taskCheck" ${task.completed ? 'checked' : ''}>
@@ -115,7 +116,7 @@ function showTasks(tasksToShow, menuTitle) {
     taskEvents(task.id, taskContainer, taskDiv);
   })
 
-  mainContent.innerHTML = `<h3>${menuTitle}</h3>`;
+  mainContent.innerHTML = `<h3 id="menuTitle">${menuTitle}</h3>`;
   mainContent.appendChild(taskContainer);
 }
 
@@ -130,15 +131,15 @@ function taskEvents(taskId, taskContainer, taskElement) {
   taskElement.querySelector('#taskCheck').addEventListener('change', () => {
     checkTask(taskId, taskElement)
   });
- }
+}
 
 function checkTask(id, taskElement) {
   const tasks = getTasks();
   const taskTarget = tasks.find((task) => task.id === id);
-  taskTarget.completed =! taskTarget.completed;
-    saveTasks(tasks);
-    console.log(tasks)
-    taskElement.classList.toggle('checkedTasks');
+  taskTarget.completed = !taskTarget.completed;
+  saveTasks(tasks);
+  console.log(tasks)
+  taskElement.classList.toggle('checkedTasks');
 }
 
 
@@ -167,7 +168,7 @@ function getTaskToEdit(id) {
   taskPriority.checked = true;
   taskDueDate.value = taskTarget.dueDate;
   taskProject.value = taskTarget.project;
-  
+
 }
 
 function removeTask(id, taskContainer, taskElement) {
@@ -185,7 +186,7 @@ function addTask(id) {
   const taskPriority = document.querySelector('input[name="priority"]:checked');
   const taskDueDate = document.getElementById('taskDueDate');
   const taskProject = document.getElementById('taskProject')
-  
+
 
   if (checkInputFields(taskTitle, taskContent, taskDueDate, taskProject, taskPriority)) {
 
@@ -212,7 +213,7 @@ function updateTask(tasks, id, taskTitle, taskContent, taskDueDate, taskProject,
     task.priority = taskPriority;
     task.dueDate = taskDueDate;
     task.project = taskProject;
-    
+
 
   }
 }
@@ -297,9 +298,11 @@ addButton.onclick = () => {
 };
 
 function popUpEvents(id) {
+
   confirmBtn.onclick = (e) => {
     addTask(id);
-    getTasksToShow();
+    const titleTasks = document.getElementById('menuTitle')
+    getTasksToShow(`${titleTasks.innerText}`)
     getProjects()
     e.preventDefault();
   }
