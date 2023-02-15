@@ -25,7 +25,7 @@ function getTasks() {
 
 function getTasksToShow(menuTitle) {
   const tasks = getTasks();
-  
+
   if (menuTitle === 'Today tasks') {
     const todayTasks = tasks.filter(task => {
       const dueDate = new Date(task.dueDate);
@@ -59,7 +59,7 @@ function getTasksToShow(menuTitle) {
 //   const tasks = getTasks();
 
 
-  
+
 //   if (menuTitle === 'Today tasks') {
 //     const todayTasks = tasks.filter(task => {
 //       const dueDate = new Date(task.dueDate);
@@ -207,7 +207,7 @@ function checkInputFields(taskTitle, taskContent, taskDueDate, taskProject) {
 
 function getProjects() {
   const datalist = document.getElementById("projectList");
-  datalist.innerHTML = '';
+  datalist.textContent = '';
   const tasks = getTasks();
   const uniqueProjects = new Set();
   tasks.forEach(task => uniqueProjects.add(task.project));
@@ -216,6 +216,20 @@ function getProjects() {
     option.value = project;
     datalist.appendChild(option);
   });
+  updateProjectsMenu(uniqueProjects)
+}
+
+function updateProjectsMenu(uniqueProjects) {
+
+  const projectsDiv = document.getElementById('projectsDiv');
+  projectsDiv.textContent = '';
+
+  uniqueProjects.forEach(project => {
+    let projectItem = document.createElement('div');
+    projectItem.textContent = project;
+    projectsDiv.appendChild(projectItem)
+  })
+  
 }
 
 
@@ -235,6 +249,7 @@ const cancelBtn = document.getElementById('cancelBtn')
 const homeBtn = document.getElementById('home');
 const todayBtn = document.getElementById('today');
 const weekBtn = document.getElementById('week');
+
 let editFlag;
 
 activePopup = () => taskPopUp.classList.add('popUpActive');
@@ -258,6 +273,7 @@ function popUpEvents(id) {
   confirmBtn.onclick = (e) => {
     addTask(id);
     getTasksToShow();
+    getProjects()
     e.preventDefault();
   }
 
@@ -270,6 +286,7 @@ function popUpEvents(id) {
 }
 
 getTasksToShow('All the tasks');
+getProjects()
 popUpEvents()
 
 
