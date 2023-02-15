@@ -34,6 +34,7 @@ function getTasksToShow(menuTitle) {
       return today.toString() === now.toString();
     });
     showTasks(todayTasks, menuTitle);
+
   } else if (menuTitle === 'This Week tasks') {
     const weekTasks = tasks.filter(task => {
       const dueDate = new Date(task.dueDate);
@@ -42,10 +43,19 @@ function getTasksToShow(menuTitle) {
       const now = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
       return now >= startOfWeek && now <= endOfWeek;
     });
-    showTasks(weekTasks, menuTitle);
-  } else {
+    showTasks(weekTasks, menuTitle)
+  }
+  else if (menuTitle === 'All the tasks') {
     showTasks(tasks, menuTitle);
   }
+
+  else {
+    const projectTasks = tasks.filter(task => task.project === menuTitle )
+    console.log(projectTasks)
+    showTasks(projectTasks,`${menuTitle} tasks`);
+  }
+
+
 }
 
 
@@ -117,8 +127,13 @@ function taskEvents(taskId, taskContainer, taskElement) {
   taskElement.querySelector('.remove').addEventListener('click', () => {
     removeTask(taskId, taskContainer, taskElement)
   });
-
+  taskElement.querySelector('#taskCheck').addEventListener('change', () => {
+    removeTask(taskId, taskContainer, taskElement)
+  });
 }
+
+
+
 
 function editTask(id) {
   editFlag = true;
@@ -225,13 +240,13 @@ function updateProjectsMenu(uniqueProjects) {
   projectsDiv.textContent = '';
 
   uniqueProjects.forEach(project => {
-    let projectItem = document.createElement('div');
+    const projectItem = document.createElement('div');
     projectItem.textContent = project;
+    projectItem.onclick = () => getTasksToShow(projectItem.innerText);
     projectsDiv.appendChild(projectItem)
   })
-  
-}
 
+}
 
 
 
@@ -246,9 +261,11 @@ const taskForm = document.getElementById('taskForm');
 const addButton = document.getElementById('addButton');
 const confirmBtn = document.getElementById('confirmBtn')
 const cancelBtn = document.getElementById('cancelBtn')
+
 const homeBtn = document.getElementById('home');
 const todayBtn = document.getElementById('today');
 const weekBtn = document.getElementById('week');
+const projectBtn = document.getElementById('projectBtn');
 
 let editFlag;
 
@@ -257,6 +274,7 @@ hidePopup = () => taskPopUp.classList.remove('popUpActive');
 formReset = () => taskForm.reset();
 
 homeBtn.onclick = () => getTasksToShow('All the tasks');
+projectBtn.onclick = () => getTasksToShow('All the tasks');
 todayBtn.onclick = () => getTasksToShow('Today tasks');
 weekBtn.onclick = () => getTasksToShow('This Week tasks');
 
