@@ -1,13 +1,7 @@
 function createTask(id, title, content, dueDate, project, priority, completed) {
 
   return {
-    id,
-    title,
-    content,
-    dueDate,
-    project,
-    priority,
-    completed,
+    id, title, content, dueDate, project, priority, completed,
   };
 }
 
@@ -29,13 +23,71 @@ function getTasks() {
 
 //DOM STUFF
 
-function showHomeTasks() {
-  const mainContent = document.querySelector('.mainContent')
+function getTasksToShow(menuTitle) {
   const tasks = getTasks();
+  
+  if (menuTitle === 'Today tasks') {
+    const todayTasks = tasks.filter(task => {
+      const dueDate = new Date(task.dueDate);
+      const today = new Date(Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate()));
+      const now = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
+      return today.toString() === now.toString();
+    });
+    showTasks(todayTasks, menuTitle);
+  } else if (menuTitle === 'This Week tasks') {
+    const weekTasks = tasks.filter(task => {
+      const dueDate = new Date(task.dueDate);
+      const startOfWeek = new Date(Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate() - dueDate.getUTCDay()));
+      const endOfWeek = new Date(Date.UTC(startOfWeek.getUTCFullYear(), startOfWeek.getUTCMonth(), startOfWeek.getUTCDate() + 6));
+      const now = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
+      return now >= startOfWeek && now <= endOfWeek;
+    });
+    showTasks(weekTasks, menuTitle);
+  } else {
+    showTasks(tasks, menuTitle);
+  }
+}
+
+
+
+
+
+
+
+// import { isToday, isThisWeek } from './node_modules/date-fns';
+// function getTasksToShow(menuTitle) {
+//   const tasks = getTasks();
+
+
+  
+//   if (menuTitle === 'Today tasks') {
+//     const todayTasks = tasks.filter(task => {
+//       const dueDate = new Date(task.dueDate);
+//       return isToday(dueDate);
+//     });
+
+//     showTasks(todayTasks, menuTitle);
+//   } else if (menuTitle === 'This Week tasks') {
+//     const weekTasks = tasks.filter(task => {
+//       const dueDate = new Date(task.dueDate);
+//       return isThisWeek(dueDate);
+//     });
+
+//     showTasks(weekTasks, menuTitle);
+//   } else {
+//     showTasks(tasks, menuTitle);
+//   }
+// }
+
+
+
+function showTasks(tasksToShow, menuTitle) {
+  const mainContent = document.querySelector('.mainContent')
   let taskContainer = document.createElement('div');
   taskContainer.className = "taskContainer";
-  tasks.forEach(task => {
 
+  const tasks = tasksToShow;
+  tasks.forEach(task => {
     const taskDiv = document.createElement('div');
     taskDiv.className = "taskDiv";
     taskDiv.innerHTML = `
@@ -53,7 +105,7 @@ function showHomeTasks() {
     taskEvents(task.id, taskContainer, taskDiv);
   })
 
-  mainContent.innerHTML = `<h3>Menu name</h3>`;
+  mainContent.innerHTML = `<h3>${menuTitle}</h3>`;
   mainContent.appendChild(taskContainer);
 }
 
@@ -118,10 +170,10 @@ function addTask(id) {
       tasks.push(newTask);
     }
     else {
-      updateTask(tasks,id, taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked)
+      updateTask(tasks, id, taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked)
 
     }
-    
+
     saveTasks(tasks);
     hidePopup()
     formReset();
@@ -181,13 +233,17 @@ const addButton = document.getElementById('addButton');
 const confirmBtn = document.getElementById('confirmBtn')
 const cancelBtn = document.getElementById('cancelBtn')
 const homeBtn = document.getElementById('home');
+const todayBtn = document.getElementById('today');
+const weekBtn = document.getElementById('week');
 let editFlag;
 
 activePopup = () => taskPopUp.classList.add('popUpActive');
 hidePopup = () => taskPopUp.classList.remove('popUpActive');
 formReset = () => taskForm.reset();
 
-homeBtn.onclick = () => showHomeTasks()
+homeBtn.onclick = () => getTasksToShow('All the tasks');
+todayBtn.onclick = () => getTasksToShow('Today tasks');
+weekBtn.onclick = () => getTasksToShow('This Week tasks');
 
 addButton.onclick = () => {
   editFlag = false;
@@ -201,19 +257,19 @@ addButton.onclick = () => {
 function popUpEvents(id) {
   confirmBtn.onclick = (e) => {
     addTask(id);
-    showHomeTasks()
+    getTasksToShow();
     e.preventDefault();
   }
 
   cancelBtn.onclick = () => {
     editFlag = false;
     hidePopup();
-    
-    
+
+
   }
 }
 
-showHomeTasks()
+getTasksToShow('All the tasks');
 popUpEvents()
 
 
