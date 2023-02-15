@@ -50,9 +50,9 @@ function getTasksToShow(menuTitle) {
   }
 
   else {
-    const projectTasks = tasks.filter(task => task.project === menuTitle )
+    const projectTasks = tasks.filter(task => task.project === menuTitle)
     console.log(projectTasks)
-    showTasks(projectTasks,`${menuTitle} tasks`);
+    showTasks(projectTasks, `${menuTitle} tasks`);
   }
 
 
@@ -102,7 +102,7 @@ function showTasks(tasksToShow, menuTitle) {
     taskDiv.className = "taskDiv";
     taskDiv.innerHTML = `
       <div class="leftSide">
-        <input type="checkbox" id="taskCheck">
+        <input type="checkbox" id="taskCheck" ${task.completed ? 'checked' : ''}>
         <div class="title">${task.title}</div>
       </div>
       <div class="rightSide">
@@ -128,8 +128,17 @@ function taskEvents(taskId, taskContainer, taskElement) {
     removeTask(taskId, taskContainer, taskElement)
   });
   taskElement.querySelector('#taskCheck').addEventListener('change', () => {
-    removeTask(taskId, taskContainer, taskElement)
+    checkTask(taskId, taskElement)
   });
+ }
+
+function checkTask(id, taskElement) {
+  const tasks = getTasks();
+  const taskTarget = tasks.find((task) => task.id === id);
+  taskTarget.completed =! taskTarget.completed;
+    saveTasks(tasks);
+    console.log(tasks)
+    taskElement.classList.toggle('checkedTasks');
 }
 
 
@@ -150,7 +159,6 @@ function getTaskToEdit(id) {
   const taskTitle = document.querySelector('#taskTitle');
   const taskContent = document.querySelector('#taskContent');
   const taskDueDate = document.querySelector('#taskDueDate');
-  const taskCompleted = document.querySelector('#taskCompleted');
   const taskPriority = document.querySelector(`input[name='priority'][value='${taskTarget.priority}']`);
   const taskProject = document.querySelector('#taskProject')
 
@@ -159,13 +167,14 @@ function getTaskToEdit(id) {
   taskPriority.checked = true;
   taskDueDate.value = taskTarget.dueDate;
   taskProject.value = taskTarget.project;
-  taskCompleted.checked = taskTarget.completed;
+  
 }
 
 function removeTask(id, taskContainer, taskElement) {
   const tasks = getTasks().filter((task) => task.id !== id);
   saveTasks(tasks);
   taskContainer.removeChild(taskElement);
+  getProjects();
 }
 
 function addTask(id) {
@@ -176,16 +185,16 @@ function addTask(id) {
   const taskPriority = document.querySelector('input[name="priority"]:checked');
   const taskDueDate = document.getElementById('taskDueDate');
   const taskProject = document.getElementById('taskProject')
-  const taskCompleted = document.getElementById('taskCompleted');
+  
 
-  if (checkInputFields(taskTitle, taskContent, taskDueDate, taskProject, taskPriority, taskCompleted)) {
+  if (checkInputFields(taskTitle, taskContent, taskDueDate, taskProject, taskPriority)) {
 
     if (!editFlag) {
-      const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked);
+      const newTask = createTask(generateId(), taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value);
       tasks.push(newTask);
     }
     else {
-      updateTask(tasks, id, taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value, taskCompleted.checked)
+      updateTask(tasks, id, taskTitle.value, taskContent.value, taskDueDate.value, taskProject.value, taskPriority.value)
 
     }
 
@@ -195,7 +204,7 @@ function addTask(id) {
   }
 }
 
-function updateTask(tasks, id, taskTitle, taskContent, taskDueDate, taskProject, taskPriority, taskCompleted) {
+function updateTask(tasks, id, taskTitle, taskContent, taskDueDate, taskProject, taskPriority) {
   const task = tasks.find(task => task.id === id);
   if (task) {
     task.title = taskTitle;
@@ -203,7 +212,7 @@ function updateTask(tasks, id, taskTitle, taskContent, taskDueDate, taskProject,
     task.priority = taskPriority;
     task.dueDate = taskDueDate;
     task.project = taskProject;
-    task.completed = taskCompleted;
+    
 
   }
 }
@@ -306,6 +315,7 @@ function popUpEvents(id) {
 getTasksToShow('All the tasks');
 getProjects()
 popUpEvents()
+console.log(getTasks())
 
 
 

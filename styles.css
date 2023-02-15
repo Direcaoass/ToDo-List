@@ -83,6 +83,11 @@ ul {
 
 }
 
+.checkedTasks{
+  text-decoration: line-through;
+  opacity: 50%;
+}
+
 .leftSide,
 .rightSide {
   display: flex;
@@ -172,6 +177,7 @@ textarea {
 
 #projectsDiv div{
   cursor: pointer; 
+  
 }
 
 
