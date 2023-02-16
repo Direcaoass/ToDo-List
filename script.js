@@ -100,7 +100,6 @@ function showTasks(tasksToShow, menuTitle) {
   tasks.forEach(task => {
     const taskDiv = document.createElement('div');
     taskDiv.className = "taskDiv";
-    task.completed ? taskDiv.classList.add('checkedTasks') : undefined;
     taskDiv.innerHTML = `
       <div class="leftSide">
         <input type="checkbox" id="taskCheck" ${task.completed ? 'checked' : ''}>
@@ -112,15 +111,22 @@ function showTasks(tasksToShow, menuTitle) {
         <button class="remove">Remove</button>
       </div>
     `;
+    const taskTitleElem = taskDiv.querySelector('.title')
+    const taskDateElem = taskDiv.querySelector('.dueDate')
+    if (task.completed) {
+      taskTitleElem.classList.add('checkedTasks');
+      taskDateElem.classList.add('checkedTasks');
+    }
+
     taskContainer.appendChild(taskDiv);
-    taskEvents(task.id, taskContainer, taskDiv);
+    taskEvents(task.id, taskContainer, taskDiv, taskTitleElem, taskDateElem);
   })
 
   mainContent.innerHTML = `<h3 id="menuTitle">${menuTitle}</h3>`;
   mainContent.appendChild(taskContainer);
 }
 
-function taskEvents(taskId, taskContainer, taskElement) {
+function taskEvents(taskId, taskContainer, taskElement, taskTitleElem, taskDateElem) {
   console.log(taskId)
   taskElement.querySelector('.edit').addEventListener('click', () => {
     editTask(taskId);
@@ -129,17 +135,18 @@ function taskEvents(taskId, taskContainer, taskElement) {
     removeTask(taskId, taskContainer, taskElement)
   });
   taskElement.querySelector('#taskCheck').addEventListener('change', () => {
-    checkTask(taskId, taskElement)
+    toggleCheckTask(taskId, taskTitleElem, taskDateElem)
   });
 }
 
-function checkTask(id, taskElement) {
+function toggleCheckTask(id, taskTitleElem, taskDateElem) {
   const tasks = getTasks();
   const taskTarget = tasks.find((task) => task.id === id);
   taskTarget.completed = !taskTarget.completed;
   saveTasks(tasks);
-  console.log(tasks)
-  taskElement.classList.toggle('checkedTasks');
+  taskTitleElem.classList.toggle('checkedTasks');
+  taskDateElem.classList.toggle('checkedTasks');
+
 }
 
 

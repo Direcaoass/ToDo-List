@@ -23,14 +23,16 @@ main {
 }
 
 
+
+
 nav {
   background-color: lightgray;
   display: flex;
   flex-direction: column;
+  text-align: center;
   gap: 8rem;
   padding-bottom: 3rem;
-  text-align: center;
-  justify-content: center;
+  padding-top: 2.5rem;
   width: 15vw;
   height: 94vh;
 
@@ -51,11 +53,11 @@ ul {
   list-style: none;
   display: flex;
   justify-content: center;
-  text-align:left;
+  text-align: left;
   padding-left: 2rem;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 2rem;
+  
 }
 
 
@@ -83,7 +85,7 @@ ul {
 
 }
 
-.checkedTasks{
+.checkedTasks {
   text-decoration: line-through;
   opacity: 50%;
 }
@@ -164,40 +166,49 @@ textarea {
 #projectsDiv {
   padding-top: 1rem;
   padding-left: 1rem;
-  gap:0.7rem;
+  gap: 0.7rem;
   display: flex;
-  align-items:flex-start;
+  align-items: flex-start;
   justify-content: center;
   flex-direction: column;
   font-size: 0.8rem;
   max-height: 10rem;
   overflow: auto;
-  
+
 }
 
-#projectsDiv div{
-  cursor: pointer; 
-  
+#projectsDiv div {
+  cursor: pointer;
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 @media (max-width: 800px) {
+
   nav {
-    width: fit-content
+    width: fit-content;
+    padding: 1rem 0.5rem;
+    margin: 0rem;
+    
+    gap:1rem;
   }
 
+  .mainContent {
+    padding: 1rem;
+    text-align: center;
+
+  }
+
+  ul {
+    text-align: center;
+    padding: 0rem;
+    margin-top: 0rem
+  }
+
+  #projectsDiv{
+    align-items: center;
+    padding-left:0rem;
+  }
 
 }
