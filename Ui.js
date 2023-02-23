@@ -1,5 +1,9 @@
 import { createTask, generateId, saveTasks, getTasks, removeTask, updateTask, } from './script.js'
 
+import {isThisWeek,isToday,parseISO } from './node_modules/date-fns/esm/index.js';
+
+
+
 (function startUI() {
   getTasksToShow('All the tasks');
   getProjects()
@@ -9,35 +13,31 @@ import { createTask, generateId, saveTasks, getTasks, removeTask, updateTask, } 
 
 function getTasksToShow(menuTitle) {
   const tasks = getTasks();
+  const now = new Date(); 
 
   if (menuTitle === 'Today tasks') {
-    const todayTasks = tasks.filter(task => {
-      const dueDate = new Date(task.dueDate);
-      const today = new Date(Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate()));
-      const now = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
-      return today.toString() === now.toString();
-    });
+    const todayTasks = tasks.filter(task => isToday(parseISO(task.dueDate)));
     showTasks(todayTasks, menuTitle);
+  }   
+ 
+  else if (menuTitle === 'This Week tasks') {
+    const weekTasks = tasks.filter(task => isThisWeek(parseISO(task.dueDate), { weekStartsOn: 1 }));
+    showTasks(weekTasks, menuTitle);
+  } 
 
-  } else if (menuTitle === 'This Week tasks') {
-    const weekTasks = tasks.filter(task => {
-      const dueDate = new Date(task.dueDate);
-      const startOfWeek = new Date(Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate() - dueDate.getUTCDay()));
-      const endOfWeek = new Date(Date.UTC(startOfWeek.getUTCFullYear(), startOfWeek.getUTCMonth(), startOfWeek.getUTCDate() + 6));
-      const now = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
-      return now >= startOfWeek && now <= endOfWeek;
-    });
-    showTasks(weekTasks, menuTitle)
-  }
   else if (menuTitle === 'All the tasks') {
     showTasks(tasks, menuTitle);
-  }
-
+  }   
+  
   else {
     const projectTasks = tasks.filter(task => task.project === menuTitle)
     showTasks(projectTasks, menuTitle);
   }
 }
+
+
+
+
 
 function showTasks(tasksToShow, menuTitle) {
   const mainContent = document.querySelector('.mainContent')
@@ -122,7 +122,7 @@ function getTaskToEdit(id) {
 
 }
 
-function addTask(id,editFlag) {
+function addTask(id, editFlag) {
   const tasks = getTasks();
 
   const taskTitle = document.getElementById('taskTitle');
@@ -228,7 +228,7 @@ function btnEvents(id, editFlag) {
 
 
   confirmBtn.onclick = (e) => {
-    addTask(id,editFlag);
+    addTask(id, editFlag);
     const titleTasks = document.getElementById('menuTitle')
     getTasksToShow(`${titleTasks.innerText}`)
     getProjects()
