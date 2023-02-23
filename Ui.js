@@ -13,8 +13,7 @@ import {isThisWeek,isToday,parseISO } from './node_modules/date-fns/esm/index.js
 
 function getTasksToShow(menuTitle) {
   const tasks = getTasks();
-  const now = new Date(); 
-
+  
   if (menuTitle === 'Today tasks') {
     const todayTasks = tasks.filter(task => isToday(parseISO(task.dueDate)));
     showTasks(todayTasks, menuTitle);
