@@ -44,33 +44,6 @@ export function updateTask(tasks, id, taskTitle, taskContent, taskDueDate, taskP
 
 
 
-// import { isToday, isThisWeek } from './node_modules/date-fns';
-// export function getTasksToShow(menuTitle) {
-//   const tasks = getTasks();
-
-
-
-//   if (menuTitle === 'Today tasks') {
-//     const todayTasks = tasks.filter(task => {
-//       const dueDate = new Date(task.dueDate);
-//       return isToday(dueDate);
-//     });
-
-//     showTasks(todayTasks, menuTitle);
-//   } else if (menuTitle === 'This Week tasks') {
-//     const weekTasks = tasks.filter(task => {
-//       const dueDate = new Date(task.dueDate);
-//       return isThisWeek(dueDate);
-//     });
-
-//     showTasks(weekTasks, menuTitle);
-//   } else {
-//     showTasks(tasks, menuTitle);
-//   }
-// }
-
-
-
 
 
 
