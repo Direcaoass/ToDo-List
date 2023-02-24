@@ -42,15 +42,3 @@ export function updateTask(tasks, id, taskTitle, taskContent, taskDueDate, taskP
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
